@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "shopee_monee_unit_economics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "401e605f-b1cf-47be-8ead-3eef2c01634c"
+  }
+}

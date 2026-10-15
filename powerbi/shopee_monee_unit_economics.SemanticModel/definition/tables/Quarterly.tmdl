@@ -1,0 +1,246 @@
+table Quarterly
+	lineageTag: 243c6410-cc66-45e4-8e70-045c2ddb338d
+
+	measure '+29% vs prior 4 quarters' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) VAR cur = CALCULATE(SUM(Quarterly[GMV_bn]), ALL(Quarterly), Quarterly[Sort] > s - 4) RETURN "US$" & FORMAT(cur, "0.0") & " bn"
+		displayFolder: KPI p1
+		lineageTag: c1bc5083-cfc2-4954-8572-f2d3e3f55cdd
+
+	measure 'AOV US$9.12 per order' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) VAR cur = CALCULATE(SUM(Quarterly[Orders_bn]), ALL(Quarterly), Quarterly[Sort] > s - 4) RETURN FORMAT(cur, "0.0") & " bn"
+		displayFolder: KPI p1
+		lineageTag: 96d08b17-5ed1-4ea0-8e07-68be921319c7
+
+	measure 'Q2 26, was 5.2% in Q3 22' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[CoreTake]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
+		displayFolder: KPI p1
+		lineageTag: 75e4ab96-1551-4413-8622-827369b4954c
+
+	measure 'Q2 26, peak 1.20% in Q1 23' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[EBITDA_GMV]), ALL(Quarterly), Quarterly[Sort] = s), "0.00%")
+		displayFolder: KPI p1
+		lineageTag: 417bbc5b-b652-4d71-a4de-94c0f5792c43
+
+	measure 'Q2 26 adj. EBITDA / gross orders' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN "US$" & FORMAT(CALCULATE(MAX(Quarterly[EBITDA_per_order]), ALL(Quarterly), Quarterly[Sort] = s), "0.000")
+		displayFolder: KPI p1
+		lineageTag: 7a74fb49-ae6d-4c1b-b529-52e39bed2446
+
+	measure 'Q2 26, incl. off-book loans' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN "US$" & FORMAT(CALCULATE(MAX(Quarterly[Loans_bn]), ALL(Quarterly), Quarterly[Sort] = s), "0.0") & " bn"
+		displayFolder: KPI p2
+		lineageTag: 84eae2d4-3bca-4978-a65a-3e5187dbbe3e
+
+	measure 'vs Q2 25, same loan measure' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN "+" & FORMAT(CALCULATE(MAX(Quarterly[LoanYoY]), ALL(Quarterly), Quarterly[Sort] = s), "0%")
+		displayFolder: KPI p2
+		lineageTag: cccfa058-fc43-45fc-8f67-bc2f1d4cf60b
+
+	measure 'past due 90+ days, Q2 26' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[NPL]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
+		displayFolder: KPI p2
+		lineageTag: 79ad7fbc-1010-4ca9-aff6-731f71278179
+
+	measure 'NPL / loan book a year earlier' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[NPL_Seasoned]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
+		displayFolder: KPI p2
+		lineageTag: 66ba8e73-921c-4f5e-a3b4-4cdebc7edb36
+
+	measure 'Q2 26, was 31.4% in Q4 23' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[MoneeMargin]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
+		displayFolder: KPI p2
+		lineageTag: 6f86cab3-9765-4a27-87a5-ba5a6bd1d504
+
+	measure 'Profit quarter' = VAR v = SUM(Quarterly[EBITDA_GMV]) RETURN IF(NOT ISBLANK(v) && v >= 0, v)
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: ab2ddce5-84c7-433c-82f2-bf59e0768fb8
+
+	measure 'Loss quarter' = VAR v = SUM(Quarterly[EBITDA_GMV]) RETURN IF(v < 0, v)
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: 6b1017f3-c4f5-411a-b382-06b67fe8d902
+
+	measure 'Loans (current measure)' = CALCULATE(SUM(Quarterly[Loans_bn]), Quarterly[CurrentLoanBasis] = TRUE())
+		formatString: 0.0
+		displayFolder: Chart
+		lineageTag: 10831c3d-22f1-4791-9e1f-4b27c4e3ce5e
+
+	measure 'Loans (older on-book measures)' = CALCULATE(SUM(Quarterly[Loans_bn]), Quarterly[CurrentLoanBasis] = FALSE())
+		formatString: 0.0
+		displayFolder: Chart
+		lineageTag: 2503c987-8016-45d4-8c3a-b483fd4111ca
+
+	measure 'H1 quarter' = CALCULATE(SUM(Quarterly[EBITDA_m]), Quarterly[Half] = "H1", Quarterly[Sort] >= 21)
+		formatString: #,0
+		displayFolder: Chart
+		lineageTag: 89e547d2-5306-4015-9507-59bdab0fad38
+
+	measure 'H2 quarter' = CALCULATE(SUM(Quarterly[EBITDA_m]), Quarterly[Half] = "H2", Quarterly[Sort] >= 21)
+		formatString: #,0
+		displayFolder: Chart
+		lineageTag: a485e5ae-905a-4be9-8dae-e67a4cfbe0a9
+
+	measure 'Fees + ads' = SUM(Quarterly[CoreTake])
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: ad0953fe-39b4-43d0-8666-0a4be669834f
+
+	measure 'Logistics (VAS)' = SUM(Quarterly[VASTake])
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: 212a4a13-8f4b-4a6e-af9f-b288c0d2138c
+
+	measure 'GMV (US$ bn)' = SUM(Quarterly[GMV_bn])
+		formatString: 0.0
+		displayFolder: Chart
+		lineageTag: a1a7e7cd-7ce3-4543-b842-c7623b343e8d
+
+	measure 'Gross orders (bn)' = SUM(Quarterly[Orders_bn])
+		formatString: 0.0
+		displayFolder: Chart
+		lineageTag: 7557f859-0a07-4d9e-80b4-d55be027f776
+
+	measure 'Reported NPL 90+' = SUM(Quarterly[NPL])
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: 078a28d8-1c67-4cf9-af36-83ce71c0ccb9
+
+	measure 'NPL / loans a year earlier' = SUM(Quarterly[NPL_Seasoned])
+		formatString: 0.0%
+		displayFolder: Chart
+		lineageTag: e8f73caa-cb45-4889-87c9-dc77e4608635
+
+	column Period
+		dataType: string
+		lineageTag: d1990cee-b1f2-47ec-914d-3e13bce4e432
+		sourceColumn: Period
+
+	column Label
+		dataType: string
+		lineageTag: b1717b2c-8d6a-408e-9129-1968a14e921a
+		sourceColumn: Label
+		sortByColumn: Sort
+
+	column Sort
+		dataType: int64
+		lineageTag: 2d51337e-2992-456c-ab11-3ac261a93c78
+		sourceColumn: Sort
+
+	column Half
+		dataType: string
+		lineageTag: e0494d05-8e19-4681-8450-0134c3196886
+		sourceColumn: Half
+
+	column GMV_bn
+		dataType: double
+		formatString: 0.0
+		lineageTag: 45ddff4c-21f2-4e1f-af7f-a8f67cb3728c
+		sourceColumn: GMV_bn
+
+	column Orders_bn
+		dataType: double
+		formatString: 0.0
+		lineageTag: 0f9c959b-5d24-4039-a800-9cba3c967adc
+		sourceColumn: Orders_bn
+
+	column AOV
+		dataType: double
+		lineageTag: 03b47bdf-c15f-4f9b-8c55-5b57c7033348
+		sourceColumn: AOV
+
+	column CoreTake
+		dataType: double
+		formatString: 0.0%
+		lineageTag: ea471d97-d6a4-42e9-ae9d-e1b8e9639647
+		sourceColumn: CoreTake
+
+	column VASTake
+		dataType: double
+		formatString: 0.0%
+		lineageTag: eeebee3b-c560-4956-8ddf-75bdebc2d961
+		sourceColumn: VASTake
+
+	column MarketplaceTake
+		dataType: double
+		lineageTag: 1dc4a76b-3daa-45b7-a194-acbb2b200fdc
+		sourceColumn: MarketplaceTake
+
+	column EBITDA_m
+		dataType: double
+		formatString: #,0
+		lineageTag: 2bf6c7ec-ae6e-48d6-bfa3-a71eab9bb822
+		sourceColumn: EBITDA_m
+
+	column EBITDA_GMV
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 4916b02c-7572-4566-88fd-50ca7c2eb629
+		sourceColumn: EBITDA_GMV
+
+	column EBITDA_per_order
+		dataType: double
+		lineageTag: 1bd897f4-1aef-4899-b68b-36408c922b8f
+		sourceColumn: EBITDA_per_order
+
+	column Loans_bn
+		dataType: double
+		formatString: 0.0
+		lineageTag: efa4522c-51eb-4dd4-b65d-2fd23616e510
+		sourceColumn: Loans_bn
+
+	column LoanBasis
+		dataType: string
+		lineageTag: 97dbe513-acca-42a4-a67d-661093680948
+		sourceColumn: LoanBasis
+
+	column NPL
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 4730cde6-562f-4f38-be37-9208dcf0e842
+		sourceColumn: NPL
+
+	column MoneeRevenue_m
+		dataType: double
+		lineageTag: 4313c625-f7bc-4f72-8bce-7db57f4c1035
+		sourceColumn: MoneeRevenue_m
+
+	column MoneeEBITDA_m
+		dataType: double
+		lineageTag: 7687488f-b869-42c1-b15f-fcf12c6a2194
+		sourceColumn: MoneeEBITDA_m
+
+	column MoneeMargin
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 8b49b075-26ba-4c7d-966f-c83ebde653f3
+		sourceColumn: MoneeMargin
+
+	column LoanYoY
+		dataType: double
+		formatString: 0%
+		lineageTag: 59182c53-981d-4c4c-b4c6-e6d07e9f9a0d
+		sourceColumn: LoanYoY
+
+	column NPL_Seasoned
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 68c0325f-6e9f-47df-ae4c-17106356b18a
+		sourceColumn: NPL_Seasoned
+
+	column CurrentLoanBasis
+		dataType: boolean
+		lineageTag: 0504fe54-b204-4b65-ae9f-51278041be68
+		sourceColumn: CurrentLoanBasis
+
+	column GMV_YoY
+		dataType: double
+		lineageTag: cb15eb70-b151-4cf4-b9ae-0b5befc152d7
+		sourceColumn: GMV_YoY
+
+	column QuarterEnd
+		dataType: dateTime
+		formatString: yyyy
+		lineageTag: 83f0feb0-3c14-4c14-b709-f760f306333d
+		sourceColumn: QuarterEnd
+
+	partition Quarterly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Emelio Exaudi\Documents\Project\Finance\Shopee Unit Economics\powerbi\data\Quarterly.csv"), [Delimiter=",", Columns=24, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Period", type text}, {"Label", type text}, {"Sort", Int64.Type}, {"Half", type text}, {"QuarterEnd", type date}, {"GMV_bn", type number}, {"Orders_bn", type number}, {"AOV", type number}, {"CoreTake", type number}, {"VASTake", type number}, {"MarketplaceTake", type number}, {"EBITDA_m", type number}, {"EBITDA_GMV", type number}, {"EBITDA_per_order", type number}, {"Loans_bn", type number}, {"LoanBasis", type text}, {"NPL", type number}, {"MoneeRevenue_m", type number}, {"MoneeEBITDA_m", type number}, {"MoneeMargin", type number}, {"LoanYoY", type number}, {"NPL_Seasoned", type number}, {"CurrentLoanBasis", type logical}, {"GMV_YoY", type number}}, "en-US")
+				in
+				    Typed
+

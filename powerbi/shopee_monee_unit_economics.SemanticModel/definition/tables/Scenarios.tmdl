@@ -1,0 +1,60 @@
+table Scenarios
+	lineageTag: fefc7d45-26b4-41ad-8d75-ac195c18e563
+
+	measure 'H1 2026 actual' = SUM(Scenarios[H1_actual])
+		formatString: #,0
+		lineageTag: d497ad85-68f0-4b31-89f2-73f4dbbfd196
+
+	measure 'H2 2026 scenario' = SUM(Scenarios[H2])
+		formatString: #,0
+		lineageTag: 51952629-aa6d-451f-944a-43c5858c8085
+
+	measure 'FY2026 total' = SUM(Scenarios[FY])
+		formatString: #,0
+		lineageTag: 37402049-f4a6-447f-8a42-62378001ef84
+
+	column Scenario
+		dataType: string
+		lineageTag: 5ba14771-e719-422a-863e-0e444e627012
+		sourceColumn: Scenario
+		sortByColumn: Sort
+
+	column Sort
+		dataType: int64
+		lineageTag: 3612cc5b-22d9-40f2-aae3-68736bfa7dd3
+		sourceColumn: Sort
+
+	column H1_actual
+		dataType: double
+		formatString: #,0
+		lineageTag: 916b9b08-c217-4c42-a41a-ba378b5e35c6
+		sourceColumn: H1_actual
+
+	column H2
+		dataType: double
+		formatString: #,0
+		lineageTag: 008cf470-3ae7-4bd5-a114-6bd463efcddd
+		sourceColumn: H2
+
+	column FY
+		dataType: double
+		formatString: #,0
+		lineageTag: 3853ce07-f1a4-490a-9924-993dbba7db18
+		sourceColumn: FY
+
+	column Target
+		dataType: double
+		formatString: #,0
+		lineageTag: 9a2a3faf-57dd-4018-aafa-f2ca7d491a20
+		sourceColumn: Target
+
+	partition Scenarios = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Emelio Exaudi\Documents\Project\Finance\Shopee Unit Economics\powerbi\data\Scenarios.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Scenario", type text}, {"Sort", Int64.Type}, {"H1_actual", type number}, {"H2", type number}, {"FY", type number}, {"Target", type number}}, "en-US")
+				in
+				    Typed
+

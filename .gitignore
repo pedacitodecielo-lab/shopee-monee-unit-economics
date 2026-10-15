@@ -1,0 +1,8 @@
+raw/
+__pycache__/
+Belajar_*.md
+~$*
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+powerbi/assets/prev_*
+powerbi/assets/monee_render.html

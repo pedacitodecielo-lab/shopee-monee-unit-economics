@@ -1,0 +1,45 @@
+table Drivers
+	lineageTag: 92907a1f-1123-4c88-a275-3feb29227258
+
+	measure 'Contribution to YoY growth' = SUM(Drivers[Contribution])
+		formatString: 0%
+		lineageTag: a1c11646-f220-4d6a-b45d-03c5f1b234d4
+
+	column Label
+		dataType: string
+		lineageTag: d6db9496-1442-44d2-bf7e-4831515020d7
+		sourceColumn: Label
+		sortByColumn: Sort
+
+	column Sort
+		dataType: int64
+		lineageTag: 122a02c2-3122-4cdd-aee3-a5ab1b84eaed
+		sourceColumn: Sort
+
+	column Component
+		dataType: string
+		lineageTag: 8f3cdeae-0afc-48b0-ada5-d459bc13af9c
+		sourceColumn: Component
+		sortByColumn: ComponentSort
+
+	column ComponentSort
+		dataType: int64
+		lineageTag: dca5534e-f356-469d-ba4b-5ceeb465eea8
+		sourceColumn: ComponentSort
+
+	column Contribution
+		dataType: double
+		formatString: 0%
+		lineageTag: b0d6eb97-db6a-424c-838e-ad08aeaff449
+		sourceColumn: Contribution
+
+	partition Drivers = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Emelio Exaudi\Documents\Project\Finance\Shopee Unit Economics\powerbi\data\Drivers.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Label", type text}, {"Sort", Int64.Type}, {"Component", type text}, {"ComponentSort", Int64.Type}, {"Contribution", type number}}, "en-US")
+				in
+				    Typed
+
