@@ -72,10 +72,17 @@ def card(ax, box, fill="white"):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=12", fc=fill, ec="#F1D5CC", lw=0.8))
 
 
-def logo(fig, path, cx, cy, height, pill_w):
+def logo_pill(fig, x0, x1, cy):
+    """One white pill behind both logos (two separate pills overlapped and looked broken)."""
     ax = fig.add_axes([0, 0, 1, 1], zorder=5)
     ax.set_xlim(0, W); ax.set_ylim(H, 0); ax.axis("off")
-    ax.add_patch(FancyBboxPatch((cx - pill_w / 2, cy - 22), pill_w, 44, boxstyle="round,pad=0,rounding_size=22", fc="white", ec="none"))
+    ax.add_patch(FancyBboxPatch((x0, cy - 22), x1 - x0, 44, boxstyle="round,pad=0,rounding_size=22", fc="white", ec="none"))
+    ax.plot([(x0 + x1) / 2 - 8, (x0 + x1) / 2 - 8], [cy - 12, cy + 12], color="#E6E6E6", lw=1)
+
+
+def logo(fig, path, cx, cy, height):
+    ax = fig.add_axes([0, 0, 1, 1], zorder=6)
+    ax.set_xlim(0, W); ax.set_ylim(H, 0); ax.axis("off")
     im = Image.open(path).convert("RGBA")
     r = height / im.height
     w = im.width * r
@@ -117,8 +124,9 @@ def background(page):
             ax.add_patch(FancyBboxPatch((bx + 14, by + 14), 6, 18, boxstyle="round,pad=0,rounding_size=3", fc=OR, ec="none"))
             ax.text(bx + 28, by + 23, title, color=INK, fontsize=11.5, fontweight="bold", va="center")
     ax.text(W / 2, 714, FOOT, color="#9A9A9A", fontsize=7, ha="center", va="center")
-    logo(fig, HERE / "assets" / "shopee_mark.png", 1072, 39, 28, 150)
-    logo(fig, HERE / "assets" / "monee_logo.png", 1196, 39, 22, 128)
+    logo_pill(fig, 1000, 1258, 39)
+    logo(fig, HERE / "assets" / "shopee_mark.png", 1063, 39, 28)
+    logo(fig, HERE / "assets" / "monee_logo.png", 1188, 39, 21)
     return fig
 
 
