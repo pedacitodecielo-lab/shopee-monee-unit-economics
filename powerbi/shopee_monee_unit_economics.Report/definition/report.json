@@ -24,6 +24,19 @@
           }
         }
       }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
     ]
   },
   "resourcePackages": [
@@ -50,6 +63,11 @@
         {
           "name": "page2.png",
           "path": "page2.png",
+          "type": "Image"
+        },
+        {
+          "name": "page3.png",
+          "path": "page3.png",
           "type": "Image"
         }
       ]

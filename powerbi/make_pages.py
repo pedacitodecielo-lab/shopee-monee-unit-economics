@@ -37,6 +37,9 @@ CARDS = {
         "c1": (316, 196, 468, 250), "c2": (796, 196, 468, 250), "c3": (316, 458, 468, 246), "c4": (796, 458, 468, 246)},
 }
 CARDS[2] = CARDS[1]
+CARDS[3] = {"side": (16, 92, 284, 612), "s1": (316, 92, 468, 104), "s2": (796, 92, 468, 104),
+            "k1": (316, 208, 181, 92), "k2": (507, 208, 181, 92), "k3": (698, 208, 181, 92), "k4": (889, 208, 181, 92),
+            "k5": (1080, 208, 184, 92), "c1": (316, 312, 468, 392), "c2": (796, 312, 468, 392)}
 TITLES = {
     1: {"k1": "GMV, last 4 quarters", "k2": "Gross orders, last 4 quarters", "k3": "Core take rate (fees + ads)",
         "k4": "Adj. EBITDA % of GMV", "k5": "Adj. EBITDA per order",
@@ -44,26 +47,36 @@ TITLES = {
         "c3": "...but profit per dollar sold stays thin", "c4": "Where marketplace revenue growth comes from (YoY)"},
     2: {"k1": "Monee loans outstanding", "k2": "Loan growth, YoY", "k3": "NPL 90+ days, reported",
         "k4": "NPL vs book a year earlier", "k5": "Monee adj. EBITDA margin",
-        "c1": "Monee's loan book has more than tripled", "c2": "Reported NPL falls; the seasoned ratio does not",
+        "c1": "Monee's loan book has more than tripled", "c2": "Reported NPL falls faster than the lagged view",
         "c3": "FY2026 nowcast: Shopee adj. EBITDA vs US$1 bn", "c4": "Shopee adj. EBITDA by quarter: the H2 dip"},
 }
+TITLES[3] = {"s1": "H2 2026 GMV growth vs H2 2025 (drag or type)", "s2": "H2 2026 adj. EBITDA as % of GMV (drag or type)",
+             "k1": "H2 2026 GMV", "k2": "H2 2026 adj. EBITDA", "k3": "FY2026 adj. EBITDA", "k4": "Gap to US$1 bn",
+             "k5": "H2 margin needed", "c1": "FY2026 adj. EBITDA vs the US$1 bn goal", "c2": "What H2 has to deliver"}
 HEAD = {1: ("Shopee Unit Economics", "Is Shopee's growth becoming more profitable?  |  Sea Ltd 6-K filings, Q1 2019 - Q2 2026, US$"),
+        3: ("FY2026 Nowcast Simulator", "Set your own H2 2026 assumptions  |  H1 2026 is reported; H2 is simulated  |  Nowcast as of 15 Oct 2026"),
         2: ("Monee Credit & the FY2026 Nowcast", "Is loan growth healthy, and can Shopee hit US$1 bn adj. EBITDA in 2026?  |  Nowcast as of 15 Oct 2026 (H1 data)")}
 SIDE = {
     1: ("Key findings", [
-        ("Take rate doubled", "Fees + ads rose from 5.2% of GMV (Q3 22) to 11.2% (Q2 26). Logistics fell to 1.8%."),
-        ("Growth mix is shifting", "37% of Q2 26 marketplace revenue growth came from a higher take rate, up from 11% a year earlier."),
-        ("Profit stays thin", "Adj. EBITDA is 0.67% of GMV, about US$0.06 an order, below Q1 23's 1.2%. Sales & marketing grew 57% YoY."),
-        ("Profit can be switched off", "Shopee went back to losses in Q3 23 - Q2 24 when Sea chose to reinvest."),
+        ("Take rate roughly doubled", "Fees + ads rose from about 5% of GMV (Q3 22) to 11.1% (Q2 26). Logistics fell to 1.8%."),
+        ("Growth mix is shifting", "37% of Q2 26 marketplace revenue growth came from a higher take rate, up from about 15% a year earlier."),
+        ("Profit stays thin", "Adj. EBITDA is 0.67% of GMV, about US$0.06 an order, below about 1.2% in Q1 23. Sales & marketing grew 57% YoY."),
+        ("Profit can be switched off", "Shopee went back to losses in Q3 23 - Q2 24 when Sea chose to invest for market share."),
     ]),
     2: ("Key findings", [
         ("Loan book x3.6", "US$3.1 bn (Q4 23) to US$11.1 bn (Q2 26), incl. off-book loans."),
         ("Margin traded for growth", "Monee adj. EBITDA margin fell from 31% to 21% over the same period."),
-        ("Seasoning check", "Reported NPL 1.0%. Divided by the book a year earlier it is about 1.6-2.0%, flat, not improving."),
-        ("US$1 bn is tight", "Nowcast from H1 26 (US$479 m): base US$1,043 m; bear US$962 m; if H2 repeats 2025's dip, US$856 m. Check vs Q3 (mid-Nov) and FY (Mar 2027)."),
+        ("Lagged NPL check", "Reported NPL 1.0%. Divided by the book a year earlier: about 1.9-2.0% for six quarters, 1.6% in Q2 26."),
+        ("US$1 bn is tight", "Nowcast from H1 26 (US$479 m): base US$1,043 m; bear US$962 m; if H2 repeats 2025's H2/H1 ratio, US$856 m. Check vs Q3 (mid-Nov) and FY (Mar 2027)."),
     ]),
 }
-FOOT = "Source: Sea Limited earnings releases (SEC Form 6-K, ex. 99.1). Q1-Q2 2023 GMV/orders derived from YoY growth Sea reported a year later. Independent analysis, not affiliated with Sea Ltd."
+SIDE[3] = ("How it works", [
+    ("Drag the two sliders", "H2 2026 GMV growth and H2 adj. EBITDA margin. H1 2026 stays at Sea's reported US$478.6 m."),
+    ("Reference points", "H1 2026 GMV growth 29.5%. Adj. EBITDA % GMV: H2 2025 0.56%, H1 2026 0.63%, Q2 2026 0.67%."),
+    ("The formula", "H2 GMV = H2 2025 GMV (US$68.9 bn) x (1 + growth). H2 EBITDA = H2 GMV x margin."),
+    ("Check it later", "Compare with Sea's Q3 2026 release (mid-Nov) and FY2026 results (around Mar 2027)."),
+])
+FOOT = "Source: Sea Limited earnings releases (SEC Form 6-K, ex. 99.1). Q1-Q2 2023 GMV/orders derived from YoY growth Sea reported a year later; marketplace revenue exact from Q1 2024, rounded before. Independent analysis, not affiliated with Sea Ltd."
 
 
 def card(ax, box, fill="white"):
@@ -238,7 +251,8 @@ def mock(page):
 if __name__ == "__main__":
     for folder in ("backgrounds", "mockups"):
         (HERE / folder).mkdir(exist_ok=True)
-    for p in (1, 2):
+    for p in (1, 2, 3):
         background(p).savefig(HERE / "backgrounds" / f"page{p}.png", dpi=100); plt.close("all")
-        mock(p).savefig(HERE / "mockups" / f"page{p}.png", dpi=100); plt.close("all")
+        if p < 3:
+            mock(p).savefig(HERE / "mockups" / f"page{p}.png", dpi=100); plt.close("all")
     print("ok")

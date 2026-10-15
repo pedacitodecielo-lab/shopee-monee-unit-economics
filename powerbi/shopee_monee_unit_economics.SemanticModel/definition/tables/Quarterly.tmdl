@@ -9,11 +9,11 @@ table Quarterly
 		displayFolder: KPI p1
 		lineageTag: 96d08b17-5ed1-4ea0-8e07-68be921319c7
 
-	measure 'Q2 26, was 5.2% in Q3 22' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[CoreTake]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
+	measure 'Q2 26, about 5% in Q3 22' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[CoreTake]), ALL(Quarterly), Quarterly[Sort] = s), "0.0%")
 		displayFolder: KPI p1
 		lineageTag: 75e4ab96-1551-4413-8622-827369b4954c
 
-	measure 'Q2 26, peak 1.20% in Q1 23' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[EBITDA_GMV]), ALL(Quarterly), Quarterly[Sort] = s), "0.00%")
+	measure 'Q2 26, about 1.2% in Q1 23' = VAR s = MAXX(ALL(Quarterly), Quarterly[Sort]) RETURN FORMAT(CALCULATE(MAX(Quarterly[EBITDA_GMV]), ALL(Quarterly), Quarterly[Sort] = s), "0.00%")
 		displayFolder: KPI p1
 		lineageTag: 417bbc5b-b652-4d71-a4de-94c0f5792c43
 

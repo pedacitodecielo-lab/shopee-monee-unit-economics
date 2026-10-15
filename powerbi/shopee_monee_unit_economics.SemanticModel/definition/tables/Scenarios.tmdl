@@ -13,6 +13,79 @@ table Scenarios
 		formatString: #,0
 		lineageTag: 37402049-f4a6-447f-8a42-62378001ef84
 
+	measure 'Sim growth' = IF(ISFILTERED('Sim GMV growth'[Value]), MAX('Sim GMV growth'[Value]), 0.295)
+		formatString: 0.0%
+		displayFolder: Simulator
+		lineageTag: 5c7750a5-5178-4da7-bdce-fecdc47e595f
+
+	measure 'Sim margin' = IF(ISFILTERED('Sim EBITDA margin'[Value]), MAX('Sim EBITDA margin'[Value]), 0.0063)
+		formatString: 0.00%
+		displayFolder: Simulator
+		lineageTag: 08449309-de89-4cb5-8458-ea99e2c16196
+
+	measure 'H2 2025 GMV' = CALCULATE(SUM(Quarterly[GMV_bn]), Quarterly[Period] IN {"2025Q3", "2025Q4"})
+		formatString: 0.0
+		displayFolder: Simulator
+		lineageTag: a961cb7c-83a5-4090-9ba6-a5450d9f81a6
+
+	measure 'H1 2026 EBITDA' = CALCULATE(SUM(Quarterly[EBITDA_m]), Quarterly[Period] IN {"2026Q1", "2026Q2"})
+		formatString: #,0
+		displayFolder: Simulator
+		lineageTag: b75335b3-8342-4390-b43f-eec1bf86eafc
+
+	measure 'Simulated H2 GMV' = [H2 2025 GMV] * (1 + [Sim growth])
+		formatString: 0.0
+		displayFolder: Simulator
+		lineageTag: da9a999e-288b-4bcd-b41f-d3a867a5f487
+
+	measure 'Simulated H2 EBITDA' = [Simulated H2 GMV] * 1000 * [Sim margin]
+		formatString: #,0
+		displayFolder: Simulator
+		lineageTag: 3148dfe8-fcb3-430e-abb8-0f276939608a
+
+	measure 'Simulated FY2026 EBITDA' = [H1 2026 EBITDA] + [Simulated H2 EBITDA]
+		formatString: #,0
+		displayFolder: Simulator
+		lineageTag: ac6d701f-65c1-4083-a447-42f6e9ec04d4
+
+	measure 'Needed in H2 for US$1 bn' = 1000 - [H1 2026 EBITDA]
+		formatString: #,0
+		displayFolder: Simulator
+		lineageTag: ad9fe9f7-2882-476b-8c40-0dae750937d0
+
+	measure 'Gauge min' = 0
+		displayFolder: Simulator
+		lineageTag: cd58d733-6365-456d-8357-551b64f52a21
+
+	measure 'Gauge max' = 1300
+		displayFolder: Simulator
+		lineageTag: 2dbba492-53eb-417b-ad42-aea61b45a7e6
+
+	measure 'US$1 bn goal' = 1000
+		formatString: #,0
+		displayFolder: Simulator
+		lineageTag: 53ab8150-a996-4788-8884-6beba7249c4c
+
+	measure 'at the chosen growth' = "US$" & FORMAT([Simulated H2 GMV], "0.0") & " bn"
+		displayFolder: Simulator
+		lineageTag: 53a10462-5023-4c3e-b4ec-769473008d93
+
+	measure 'at the chosen margin' = "US$" & FORMAT([Simulated H2 EBITDA], "#,0") & " m"
+		displayFolder: Simulator
+		lineageTag: b1122476-e983-4d4e-a5b5-6a596eb6812e
+
+	measure 'H1 actual + H2 simulated' = "US$" & FORMAT([Simulated FY2026 EBITDA], "#,0") & " m"
+		displayFolder: Simulator
+		lineageTag: c24b1913-991c-46e7-a6f7-802d1bcec5db
+
+	measure 'vs the US$1 bn goal' = VAR g = [Simulated FY2026 EBITDA] - 1000 RETURN IF(g >= 0, "+", "-") & "US$" & FORMAT(ABS(g), "#,0") & " m"
+		displayFolder: Simulator
+		lineageTag: 0f36ec91-0b23-40f1-90b4-a9a8f199232e
+
+	measure 'of H2 GMV, at the chosen growth' = FORMAT([Needed in H2 for US$1 bn] / ([Simulated H2 GMV] * 1000), "0.00%")
+		displayFolder: Simulator
+		lineageTag: 93517aa1-f7c8-439c-a8bb-23c105824b48
+
 	column Scenario
 		dataType: string
 		lineageTag: 5ba14771-e719-422a-863e-0e444e627012

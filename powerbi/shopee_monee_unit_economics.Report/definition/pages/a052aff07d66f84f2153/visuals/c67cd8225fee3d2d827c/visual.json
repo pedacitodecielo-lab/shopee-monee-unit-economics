@@ -23,11 +23,11 @@
                       "Entity": "Quarterly"
                     }
                   },
-                  "Property": "Q2 26, was 5.2% in Q3 22"
+                  "Property": "Q2 26, about 5% in Q3 22"
                 }
               },
-              "queryRef": "Quarterly.Q2 26, was 5.2% in Q3 22",
-              "nativeQueryRef": "Q2 26, was 5.2% in Q3 22"
+              "queryRef": "Quarterly.Q2 26, about 5% in Q3 22",
+              "nativeQueryRef": "Q2 26, about 5% in Q3 22"
             }
           ]
         }

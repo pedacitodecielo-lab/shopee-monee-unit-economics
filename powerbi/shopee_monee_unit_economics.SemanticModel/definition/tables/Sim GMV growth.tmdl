@@ -1,0 +1,12 @@
+table 'Sim GMV growth'
+	lineageTag: 8166a104-7389-4d26-b7ae-172179ad929f
+
+	column Value
+		formatString: 0.0%
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition 'Sim GMV growth' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(150, 400, 5), "Value", [Value] / 1000)
+

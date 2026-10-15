@@ -1,0 +1,12 @@
+table 'Sim EBITDA margin'
+	lineageTag: 478fd5fc-ff71-4955-b6bd-0500d26cd5ac
+
+	column Value
+		formatString: 0.00%
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition 'Sim EBITDA margin' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(40, 90, 1), "Value", [Value] / 10000)
+

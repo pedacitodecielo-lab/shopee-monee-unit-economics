@@ -47,6 +47,19 @@ def table_ebitda(t, names):
     return num(m.group(1)), num(m.group(2))  # prior-year quarter, current quarter (US$ millions)
 
 
+def table_service_revenue(t, names):
+    """Current-quarter 'Service revenue' row for a segment (US$ thousands -> millions), exact unlike the rounded bullets.
+    Older tables merge rows ('E-commerce and other services'); those are skipped."""
+    seg = re.search(r"Service revenue (?:Shopee|E-commerce|Digital Entertainment) ", t)  # segment table, not the P&L line
+    if not seg:
+        return None, None
+    s = seg.start()
+    m = re.search(rf"(?:{names}) ([\d,]+) ([\d,]+) ", t[s:s + 600])
+    if not m or t[s + m.end(): s + m.end() + 4] == "and ":
+        return None, None
+    return float(m.group(1).replace(",", "")) / 1000, float(m.group(2).replace(",", "")) / 1000  # prior-year, current
+
+
 def main():
     rows = []
     for date, title, url, fn in json.loads((HERE / "releases.json").read_text()):
@@ -73,6 +86,8 @@ def main():
         r["core_marketplace_usd_m"] = first(r"Core marketplace revenue[^$]{0,200}? to " + MONEY, shp, usd_m)
         r["vas_usd_m"] = first(r"Value-added services revenue[^$]{0,200}? to " + MONEY, shp, usd_m)
         r["shopee_adj_ebitda_prior_usd_m"], r["shopee_adj_ebitda_usd_m"] = table_ebitda(t, "E-commerce|Shopee")
+        r["_shopee_exact"] = table_service_revenue(t, "Shopee|E-commerce")
+        r["_monee_exact"] = table_service_revenue(t, "Monee|Digital Financial Services|SeaMoney")
         r["monee_revenue_usd_m"] = first(r"(?:GAAP|[Aa]djusted) revenue (?:was|of) " + MONEY, mon, usd_m)
         r["monee_adj_ebitda_prior_usd_m"], r["monee_adj_ebitda_usd_m"] = table_ebitda(t, "Digital Financial Services|SeaMoney|Monee")
         # Sea changed the loan-book measure twice; keep the basis so series are never mixed silently
@@ -90,6 +105,25 @@ def main():
         r["npl_note"] = first(r"(?:(?:to |represented )less than|at around) ([\d.]+)%", npl,
                               lambda m: ("~" if "around" in m.group(0) else "<") + m.group(1) + "%") or ""
         rows.append(r)
+    # Exact segment service revenue (US$ thousands tables, from the 2025 releases; their prior-year column covers 2024).
+    # Shopee service revenue = marketplace revenue (same YoY as the bullet), so core = marketplace - VAS exactly.
+    by = {r["period"]: r for r in rows}
+    for r in rows:
+        r["marketplace_source"] = r["core_source"] = r["monee_revenue_source"] = "rounded bullet" if r["marketplace_usd_m"] else ""
+        r["monee_revenue_source"] = "rounded bullet" if r["monee_revenue_usd_m"] else ""
+    for r in rows:
+        prev = f"{r['year'] - 1}Q{r['quarter']}"
+        for key, col, src in (("_shopee_exact", "marketplace_usd_m", "marketplace_source"), ("_monee_exact", "monee_revenue_usd_m", "monee_revenue_source")):
+            prior, cur = r[key]
+            for period, v in ((r["period"], cur), (prev, prior)):
+                if v is not None and period in by:
+                    by[period][col] = v
+                    by[period][src] = "exact segment table"
+    for r in rows:
+        del r["_shopee_exact"], r["_monee_exact"]
+        if r["marketplace_source"] == "exact segment table" and r["vas_usd_m"]:
+            r["core_marketplace_usd_m"] = round(r["marketplace_usd_m"] - r["vas_usd_m"], 3)
+            r["core_source"] = "exact table minus VAS"
     out = HERE / "data"
     out.mkdir(exist_ok=True)
     with open(out / "sea_quarterly.csv", "w", newline="", encoding="utf-8") as f:

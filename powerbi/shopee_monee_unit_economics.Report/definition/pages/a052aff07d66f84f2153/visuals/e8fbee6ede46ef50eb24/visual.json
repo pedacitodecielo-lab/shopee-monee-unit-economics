@@ -23,11 +23,11 @@
                       "Entity": "Quarterly"
                     }
                   },
-                  "Property": "Q2 26, peak 1.20% in Q1 23"
+                  "Property": "Q2 26, about 1.2% in Q1 23"
                 }
               },
-              "queryRef": "Quarterly.Q2 26, peak 1.20% in Q1 23",
-              "nativeQueryRef": "Q2 26, peak 1.20% in Q1 23"
+              "queryRef": "Quarterly.Q2 26, about 1.2% in Q1 23",
+              "nativeQueryRef": "Q2 26, about 1.2% in Q1 23"
             }
           ]
         }

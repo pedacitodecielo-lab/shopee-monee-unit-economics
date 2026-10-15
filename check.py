@@ -87,6 +87,22 @@ for date, title, url, fn in json.loads((HERE / "releases.json").read_text()):
         out.append(f"| {y} | {col} | {full:.1f} | {s:.2f}{note} | {(s / full - 1) * 100:+.1f} |")
 out += ["", "Gaps within about 3% come from Sea printing quarters rounded to 0.1 bn.", ""]
 
+# 5. exact core marketplace revenue (segment table minus VAS) vs the core YoY growth Sea prints
+out += ["## 5. Exact core marketplace revenue vs reported core YoY", "", "| period | reported % | computed % | ok |", "|---|---|---|---|"]
+rel_by = {}
+for date, title, url, fn in json.loads((HERE / "releases.json").read_text()):
+    rel_by[f"{re.search(r'(\d{4})', title).group(1)}Q{ {'First': 1, 'Second': 2, 'Third': 3, 'Fourth': 4}[title.split()[0]] }"] = fn
+for p in df.index:
+    prev = f"{int(p[:4]) - 1}{p[4:]}"
+    if df.at[p, "core_source"] != "exact table minus VAS" or prev not in df.index or df.at[prev, "core_source"] != "exact table minus VAS":
+        continue
+    t = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", (HERE / "raw" / rel_by[p]).read_text(encoding="utf-8"))))
+    m = re.search(r"Core marketplace revenue[^%]{0,120}?up ([\d.]+)% year-on-year", t)
+    comp = (df.at[p, "core_marketplace_usd_m"] / df.at[prev, "core_marketplace_usd_m"] - 1) * 100
+    ok = m and abs(float(m.group(1)) - comp) < 0.06
+    out.append(f"| {p} | {m.group(1) if m else 'n/a'} | {comp:.1f} | {'yes' if ok else '**NO**'} |")
+out.append("")
+
 # missing values that remain
 miss = df[["gmv_usd_bn", "gross_orders_bn", "shopee_revenue_usd_m", "marketplace_usd_m", "shopee_adj_ebitda_usd_m"]].isna()
 out += ["## 4. Remaining gaps", ""] + [f"- {p}: {', '.join(c for c in miss.columns if miss.at[p, c])}" for p in miss.index if miss.loc[p].any()] + [""]

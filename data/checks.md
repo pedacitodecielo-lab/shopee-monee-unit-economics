@@ -85,5 +85,16 @@ Rows above are restatements by Sea (e.g. segment re-allocations). The model uses
 
 Gaps within about 3% come from Sea printing quarters rounded to 0.1 bn.
 
+## 5. Exact core marketplace revenue vs reported core YoY
+
+| period | reported % | computed % | ok |
+|---|---|---|---|
+| 2025Q1 | 39.2 | 39.2 | yes |
+| 2025Q2 | 46.2 | 46.2 | yes |
+| 2025Q3 | 52.8 | 52.8 | yes |
+| 2025Q4 | 50.2 | 50.2 | yes |
+| 2026Q1 | 61.0 | 61.0 | yes |
+| 2026Q2 | 65.6 | 65.6 | yes |
+
 ## 4. Remaining gaps
 

@@ -98,6 +98,30 @@ def kpi(entity, name, accent=False):
             "drillFilterOtherVisuals": True}
 
 
+S = "Scenarios"
+
+
+def plain(vtype, roles, objects):
+    """Chart without a category axis (no sort definition)."""
+    return {"visualType": vtype, "query": {"queryState": roles}, "objects": objects, "drillFilterOtherVisuals": True,
+            "visualContainerObjects": {**off("title", "background", "border", "dropShadow")}}
+
+
+def slider(table, default):
+    """'Less than or equal to' slider on a what-if table. The measure takes MAX(Value) under the filter, so a dragged
+    handle snaps to the nearest step below it ('Single' mode filters on exact equality and loses dragged values)."""
+    cond = {"Condition": {"Comparison": {"ComparisonKind": 4, "Left": {"Column": {"Expression": {"SourceRef": {"Source": "s"}}, "Property": "Value"}},
+                                         "Right": {"Literal": {"Value": f"{default}D"}}}}}
+    filt = {"filter": {"Version": 2, "From": [{"Name": "s", "Entity": table, "Type": 0}], "Where": [cond]}}
+    return {"visualType": "slicer",
+            "query": {"queryState": {"Values": {"projections": [proj(column(table, "Value"), table, "Value", active=True)]}}},
+            # 'Before' is Power BI's internal name for the 'Less than or equal to' style
+            "objects": {"data": [{"properties": {"mode": lit("'Before'"), "numericEnd": lit(f"{default}D")}}],
+                        "general": [{"properties": {"filter": filt}}], **off("header")},
+            "visualContainerObjects": {**off("title", "background", "border", "dropShadow")},
+            "drillFilterOtherVisuals": True}
+
+
 def kbox(box):
     x, y, w, h = box
     return (x + 4, y + 28, w - 8, h - 32)
@@ -117,7 +141,7 @@ def ys(*names, entity=Q, role="Y"):
 PAGES = {
     1: ("Shopee", [
         ("k1", kpi(Q, "+29% vs prior 4 quarters")), ("k2", kpi(Q, "AOV US$9.12 per order")),
-        ("k3", kpi(Q, "Q2 26, was 5.2% in Q3 22", accent=True)), ("k4", kpi(Q, "Q2 26, peak 1.20% in Q1 23")),
+        ("k3", kpi(Q, "Q2 26, about 5% in Q3 22", accent=True)), ("k4", kpi(Q, "Q2 26, about 1.2% in Q1 23")),
         ("k5", kpi(Q, "Q2 26 adj. EBITDA / gross orders")),
         ("c1", chart("lineClusteredColumnComboChart", {**datecat, **ys("GMV (US$ bn)"), **ys("Gross orders (bn)", role="Y2")},
                      {"categoryAxis": DATEAXIS, "valueAxis": [{"properties": {**VAXIS[0]["properties"], "secShow": lit("true"),
@@ -169,6 +193,23 @@ PAGES = {
                      {"categoryAxis": AXIS, "valueAxis": VAXIS, "legend": legend(),
                       "dataPoint": series_colours(Q, [("H1 quarter", OR), ("H2 quarter", OR_L)])})),
     ]),
+    3: ("FY2026 nowcast simulator", [
+        ("s1", slider("Sim GMV growth", 0.295)), ("s2", slider("Sim EBITDA margin", 0.0063)),
+        ("k1", kpi(S, "at the chosen growth")), ("k2", kpi(S, "at the chosen margin")),
+        ("k3", kpi(S, "H1 actual + H2 simulated", accent=True)), ("k4", kpi(S, "vs the US$1 bn goal")),
+        ("k5", kpi(S, "of H2 GMV, at the chosen growth")),
+        ("c1", plain("gauge", {"Y": {"projections": [proj(measure(S, "Simulated FY2026 EBITDA"), S, "Simulated FY2026 EBITDA")]},
+                               "MinValue": {"projections": [proj(measure(S, "Gauge min"), S, "Gauge min")]},
+                               "MaxValue": {"projections": [proj(measure(S, "Gauge max"), S, "Gauge max")]},
+                               "TargetValue": {"projections": [proj(measure(S, "US$1 bn goal"), S, "US$1 bn goal")]}},
+                     {"dataPoint": [{"properties": {"fill": colour(OR), "target": colour(INK)}}],
+                      "calloutValue": [{"properties": {"color": colour(INK), "labelDisplayUnits": lit("1D")}}],
+                      "labels": [{"properties": {"color": colour(MUTED), "labelDisplayUnits": lit("1D")}}]})),
+        ("c2", plain("clusteredColumnChart", ys("H1 2026 EBITDA", "Simulated H2 EBITDA", "Needed in H2 for US$1 bn", entity=S),
+                     {"valueAxis": VAXIS, "legend": legend(),
+                      "dataPoint": series_colours(S, [("H1 2026 EBITDA", OR_L), ("Simulated H2 EBITDA", OR), ("Needed in H2 for US$1 bn", GREY)]),
+                      "labels": [{"properties": {"show": lit("true"), "fontSize": lit("10D"), "labelDisplayUnits": lit("1D")}}]})),
+    ]),
 }
 
 
@@ -199,7 +240,9 @@ def main():
             box = CARDS[p][key]
             vid = uid(str(p), key)
             (vdir / vid).mkdir()
-            c = container(vid, kbox(box) if key.startswith("k") else inside(box), vis, z * 1000)
+            x, y, w, h = box
+            pos = kbox(box) if key.startswith("k") else (x + 8, y + 30, w - 16, h - 32) if key.startswith("s") else inside(box)
+            c = container(vid, pos, vis, z * 1000)  # slicers get extra height so the slider bar shows
             (vdir / vid / "visual.json").write_text(json.dumps(c, indent=2), encoding="utf-8")
     (pages_dir / "pages.json").write_text(json.dumps({"$schema": f"{SCHEMA}/pagesMetadata/1.1.0/schema.json",
                                                        "pageOrder": order, "activePageName": order[0]}, indent=2), encoding="utf-8")

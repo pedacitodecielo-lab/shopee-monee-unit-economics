@@ -59,6 +59,7 @@ lines = [
     ("", None),
     ("Data notes and limits", Font(bold=True)),
     ("- Sea prints most bullet figures rounded (e.g. GMV to US$0.1 bn); adjusted EBITDA comes from exact tables (US$ thousands). Ratios inherit that rounding.", None),
+    ("- Marketplace and Monee revenue come from Sea's exact segment tables (US$ thousands) from Q1 2024 onward; earlier quarters use the rounded bullets, so 2022-2023 take rates are approximate.", None),
     ("- Q1 and Q2 2023: Sea did not report GMV or gross orders. They are derived from the YoY growth Sea reported for Q1/Q2 2024 and flagged; the FY2023 totals confirm them (within 0.7%).", None),
     ("- Q1 and Q2 2020 adjusted EBITDA were later restated by Sea by a few million; this file keeps first-reported values (see Checks).", None),
     ("- Monee's loan measure changed: net on-book receivables (to Q2 2023), gross on-book receivables (Q3 2023), principal outstanding incl. off-book (from Q4 2023). Growth rates are only computed within one basis.", None),
@@ -226,7 +227,7 @@ for i, (label, vals, fmt) in enumerate(assumptions, 19):
     for j, v in enumerate(vals, 2):
         c = ws.cell(row=i, column=j, value=v)
         c.number_format, c.fill = fmt, PatternFill("solid", fgColor=INPUT)
-ws["A21"] = "Why these: Bear = growth 5 pts slower and H2 margin like H2 2025 (mega-sale season); Base = H1 2026 growth and margin; Bull = 3 pts faster growth at the Q2 2026 margin."
+ws["A21"] = "Why these: Bear = growth 5 pts slower and H2 margin like H2 2025; Base = H1 2026 growth and margin; Bull = 3 pts faster growth at the Q2 2026 margin."
 ws["A21"].font = Font(italic=True, color="666666")
 outputs = [
     ("H2 2026 GMV (US$ bn)", "=($B$9+$B$10)*(1+{c}19)", "0.0"),

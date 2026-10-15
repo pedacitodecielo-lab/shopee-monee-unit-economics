@@ -43,7 +43,7 @@ q["LoanYoY"] = np.where(same, q.Loans_bn / prev.Loans_bn - 1, np.nan)
 q["NPL_Seasoned"] = np.where(same & q.NPL.notna(), q.NPL * q.Loans_bn / prev.Loans_bn, np.nan)
 q["CurrentLoanBasis"] = q.LoanBasis.str.startswith("principal")
 q["GMV_YoY"] = q.GMV_bn / prev.GMV_bn - 1
-assert abs(q.CoreTake.iloc[-1] - 0.1123) < 0.0005 and abs(q.EBITDA_GMV.iloc[-1] - 0.00667) < 0.00005  # matches Excel
+assert abs(q.CoreTake.iloc[-1] - 0.1111) < 0.0005 and abs(q.EBITDA_GMV.iloc[-1] - 0.00667) < 0.00005  # matches Excel
 q.to_csv(OUT / "Quarterly.csv", index=False, float_format="%.6f")
 
 # growth drivers (same log decomposition as the Growth_Drivers sheet), in percentage points of YoY growth
