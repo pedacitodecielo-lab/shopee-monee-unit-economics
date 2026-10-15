@@ -45,7 +45,7 @@ ws.column_dimensions["A"].width = 120
 lines = [
     ("Shopee & Monee unit economics, Q1 2019 - Q2 2026", TITLE),
     ("Source: Sea Limited (NYSE: SE) quarterly earnings releases (Form 6-K, exhibit 99.1) on SEC EDGAR. Each Data row links to its filing.", None),
-    ("Question: is Shopee's growth becoming more profitable, is Monee's fast loan growth staying healthy, and is the 'US$1 billion Shopee adjusted EBITDA in FY2026' expectation realistic?", None),
+    ("Question: is Shopee's growth becoming more profitable, is Monee's fast loan growth staying healthy, and, before H2 is reported, how likely is the 'US$1 billion Shopee adjusted EBITDA in FY2026' expectation (nowcast as of 15 Oct 2026)?", None),
     ("", None),
     ("How to read this file", Font(bold=True)),
     ("- Yellow cells on Target_2026 are assumptions you can change. Everything else is a formula or a reported number.", None),
@@ -192,8 +192,10 @@ for col in "BCDE":
     ws.column_dimensions[col].width = 16
 row_of = {p: r for r, p in enumerate(df["period"], FIRST)}
 q = lambda key, p: d(key, row_of[p])
-ws["A1"], ws["A1"].font = "Can Shopee reach US$1 billion adjusted EBITDA in FY2026?", TITLE
+ws["A1"], ws["A1"].font = "Nowcast: can Shopee reach US$1 billion adjusted EBITDA in FY2026?", TITLE
 ws["A2"] = "Sea's CEO said in the Q2 2026 release that he is 'optimistic' Shopee will reach US$1 billion adjusted EBITDA for the full year."
+ws["A3"] = "Pre-results estimate (nowcast) made on 15 Oct 2026 from H1 2026 data, before Sea reports Q3 2026 (mid-November 2026) and FY2026 (around March 2027)."
+ws["A3"].font = Font(italic=True, color="666666")
 ws["A4"], ws["A4"].font = "Actuals (from Data)", Font(bold=True)
 facts = [("Q1 2026 adj. EBITDA (US$ m)", f"={q('shopee_adj_ebitda_usd_m', '2026Q1')}", "#,##0.0"),
          ("Q2 2026 adj. EBITDA (US$ m)", f"={q('shopee_adj_ebitda_usd_m', '2026Q2')}", "#,##0.0"),

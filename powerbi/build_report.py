@@ -142,7 +142,7 @@ PAGES = {
                           for n, c in (("More orders", OR_L), ("Higher take rate", OR), ("Order value", GREY))]},
                      sort_entity="Drivers")),
     ]),
-    2: ("Monee & FY2026 target", [
+    2: ("Monee & FY2026 nowcast", [
         ("k1", kpi(Q, "Q2 26, incl. off-book loans")), ("k2", kpi(Q, "vs Q2 25, same loan measure")),
         ("k3", kpi(Q, "past due 90+ days, Q2 26")), ("k4", kpi(Q, "NPL / loan book a year earlier", accent=True)),
         ("k5", kpi(Q, "Q2 26, was 31.4% in Q4 23")),

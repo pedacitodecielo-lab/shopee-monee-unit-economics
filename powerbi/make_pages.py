@@ -45,10 +45,10 @@ TITLES = {
     2: {"k1": "Monee loans outstanding", "k2": "Loan growth, YoY", "k3": "NPL 90+ days, reported",
         "k4": "NPL vs book a year earlier", "k5": "Monee adj. EBITDA margin",
         "c1": "Monee's loan book has more than tripled", "c2": "Reported NPL falls; the seasoned ratio does not",
-        "c3": "FY2026 Shopee adj. EBITDA vs the US$1 bn goal", "c4": "Shopee adj. EBITDA by quarter: the H2 dip"},
+        "c3": "FY2026 nowcast: Shopee adj. EBITDA vs US$1 bn", "c4": "Shopee adj. EBITDA by quarter: the H2 dip"},
 }
 HEAD = {1: ("Shopee Unit Economics", "Is Shopee's growth becoming more profitable?  |  Sea Ltd 6-K filings, Q1 2019 - Q2 2026, US$"),
-        2: ("Monee Credit & the FY2026 Target", "Is fast loan growth healthy, and can Shopee reach US$1 bn adj. EBITDA in 2026?  |  US$")}
+        2: ("Monee Credit & the FY2026 Nowcast", "Is loan growth healthy, and can Shopee hit US$1 bn adj. EBITDA in 2026?  |  Nowcast as of 15 Oct 2026 (H1 data)")}
 SIDE = {
     1: ("Key findings", [
         ("Take rate doubled", "Fees + ads rose from 5.2% of GMV (Q3 22) to 11.2% (Q2 26). Logistics fell to 1.8%."),
@@ -60,7 +60,7 @@ SIDE = {
         ("Loan book x3.6", "US$3.1 bn (Q4 23) to US$11.1 bn (Q2 26), incl. off-book loans."),
         ("Margin traded for growth", "Monee adj. EBITDA margin fell from 31% to 21% over the same period."),
         ("Seasoning check", "Reported NPL 1.0%. Divided by the book a year earlier it is about 1.6-2.0%, flat, not improving."),
-        ("US$1 bn is tight", "H1 26 gave US$479 m. Base case US$1,043 m; bear US$962 m; if H2 repeats 2025's dip, US$856 m."),
+        ("US$1 bn is tight", "Nowcast from H1 26 (US$479 m): base US$1,043 m; bear US$962 m; if H2 repeats 2025's dip, US$856 m. Check vs Q3 (mid-Nov) and FY (Mar 2027)."),
     ]),
 }
 FOOT = "Source: Sea Limited earnings releases (SEC Form 6-K, ex. 99.1). Q1-Q2 2023 GMV/orders derived from YoY growth Sea reported a year later. Independent analysis, not affiliated with Sea Ltd."

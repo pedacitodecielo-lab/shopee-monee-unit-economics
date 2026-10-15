@@ -3,12 +3,12 @@
 This project asks three questions using Sea Limited's own quarterly earnings releases:
 - Is Shopee's growth becoming more profitable?
 - Is Monee's fast loan growth staying healthy?
-- Is a US$1 billion Shopee adjusted EBITDA in FY2026 realistic?
+- Before Sea reports the second half, how likely is a US$1 billion Shopee adjusted EBITDA in FY2026? This is a nowcast made on 15 Oct 2026 from H1 data. It will be checked against Q3 2026 (mid-November 2026) and FY2026 (around March 2027).
 
 **Findings:** see [Memo.md](Memo.md). **Model:** `Shopee_Monee_Unit_Economics.xlsx`. **Dashboard:** Power BI project in `powerbi/` (open `shopee_monee_unit_economics.pbip`). Every derived number in the model is a live formula, and every data row links to the SEC filing it came from.
 
 ![Shopee page](images/dashboard_page1.png)
-![Monee and FY2026 target page](images/dashboard_page2.png)
+![Monee and FY2026 nowcast page](images/dashboard_page2.png)
 
 ## Pipeline
 
